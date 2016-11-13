@@ -15,8 +15,8 @@ export abstract class FormModel {
     this.y = y;
     this.width = width;
     this.height = height
-    this.dx = Math.random()*this.width/2;
-    this.dy = Math.random()*this.height/2;
+    this.dx = Math.random()*this.width/5;
+    this.dy = Math.random()*this.height/5;
   }
 
 

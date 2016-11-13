@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SquareModel } from './square.model';
 
 @Component({
@@ -8,8 +8,10 @@ import { SquareModel } from './square.model';
 export class SquareComponent {
   @Input()
   squareData: SquareModel;
+  @Output()
+  onDivide = new EventEmitter<SquareModel>();
 
   public divide(): void{
-    console.log("The square at (%s,%s) with size %s should divivde", this.squareData.x, this.squareData.y, this.squareData.side);
+    this.onDivide.emit(this.squareData);
   }
 }

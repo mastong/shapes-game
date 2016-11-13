@@ -9,11 +9,11 @@ import { FormService } from './form.service';
   selector: 'my-app',
   template: `
     <h1>Let's play with forms!</h1>
-    <svg attr.width="{{canvasWidth}}" attr.height="{{canvasHeight}}" style="background-color:gray" (click)="toggleRunning()">
+    <svg attr.width="{{canvasWidth}}" attr.height="{{canvasHeight}}" style="background-color:gray">
       <g *ngFor="let form of forms">
         <g [ngSwitch]="form.getType()">
-          <g *ngSwitchCase="'circle'" circleForm [circleData]="form"></g>
-          <g *ngSwitchCase="'square'" squareForm [squareData]="form"></g>
+          <g *ngSwitchCase="'circle'" circleForm [circleData]="form" (onDivide)="divide($event)"></g>
+          <g *ngSwitchCase="'square'" squareForm [squareData]="form" (onDivide)="divide($event)"></g>
           <g *ngSwitchDefault><!-- Form type unknow --></g>
         </g>
       </g>
@@ -58,7 +58,6 @@ export class AppComponent {
       return;
     }
 
-    console.log("Current form type selected : %s", this.currentFormType);
     this.forms.push(this.formService.generateForm(this.currentFormType));
   }
 
@@ -83,5 +82,14 @@ export class AppComponent {
     if(this.running){
       requestAnimationFrame(()=> this.moveForms());
     }
+  }
+
+  public divide(form: FormModel){
+    let newForms: FormModel[] = this.formService.divide(form);
+    let index: number = this.forms.indexOf(form);
+    this.forms.splice(index, 1);
+    newForms.forEach((form: FormModel) =>{
+      this.forms.push(form);
+    });
   }
 }

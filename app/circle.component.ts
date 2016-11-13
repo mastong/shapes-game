@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CircleModel } from './circle.model';
 
 @Component({
@@ -8,8 +8,10 @@ import { CircleModel } from './circle.model';
 export class CircleComponent {
   @Input()
   circleData: CircleModel;
+  @Output()
+  onDivide = new EventEmitter<CircleModel>();
 
   public divide(): void{
-    console.log("The circle at (%s,%s) with radius %s should divivde", this.circleData.centerX, this.circleData.centerY, this.circleData.radius);
+    this.onDivide.emit(this.circleData);
   }
 }
