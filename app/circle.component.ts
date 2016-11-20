@@ -3,7 +3,7 @@ import { CircleModel } from './circle.model';
 
 @Component({
   selector: '[circleForm]',
-  template: '<svg:circle attr.cx="{{ circleData.centerX }}" attr.cy="{{ circleData.centerY }}" attr.r="{{ circleData.radius }}"  fill="yellow" (click)="divide()"></circle>'
+  template: '<svg:circle attr.cx="{{ circleData.centerX }}" attr.cy="{{ circleData.centerY }}" attr.r="{{ circleData.radius }}"  fill="yellow" (mousedown)="divide()"></circle>'
 })
 export class CircleComponent {
   @Input()
