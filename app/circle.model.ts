@@ -16,13 +16,20 @@ export class CircleModel extends FormModel{
     this.radius = radius;
   }
 
+  /** @override FormModel*/
   public getType(): string{
     return CircleModel.CIRCLE_TYPE;
   }
 
-  public move(maxX: number, maxY: number){
-    // TODO use the maxX/maxY to make the circle bounce
-    this.centerX += this.dx;
-    this.centerY += this.dy;
+  /** @override FormModel*/
+  public setX(x: number){
+    super.setX(x);
+    this.centerX = x+this.radius;
+  }
+
+  /** @override FormModel*/
+  public setY(y: number){
+    super.setY(y);
+    this.centerY = y+this.radius;
   }
 }

@@ -18,17 +18,22 @@ export class FormService{
     this.canvasHeight = canvasHeight;
   }
 
+  /**
+   * Generate a new valid form of the given type
+   * @param formType The type of the form to return
+   * @returns The newly created form of the given type
+   */
   public generateForm(formType: string): FormModel{
     let result;
     switch(formType){
       case CircleModel.CIRCLE_TYPE :
-        let r: number = this.randInt(minWidth/2, 15);
+        let r: number = this.randInt(minWidth/2, minWidth*5);
         let cx: number = this.randInt(r, this.canvasWidth-r);
         let cy: number = this.randInt(r, this.canvasHeight-r);
         result = new CircleModel(cx, cy, r);
         break;
       case SquareModel.SQUARE_TYPE:
-        let side: number = this.randInt(minWidth, 30);
+        let side: number = this.randInt(minWidth, minWidth*10);
         let x: number = this.randInt(side, this.canvasWidth-side);
         let y: number = this.randInt(side, this.canvasHeight-side);
         result = new SquareModel(x, y, side);
@@ -43,15 +48,19 @@ export class FormService{
     return (Math.floor(Math.random() * (max-min)) + min);
   }
 
+  /**
+   * Divivde the given form into 2 smaller form of the same type. The original form is removed from the board.
+   * If the new forms are smaller than the min dimension for a form, then the original form is still removed, but no other forms are added to the board
+   * @param form The form to divide
+   * @returns an array of FormModel containing the 2 new forms if the division went well, or nothing.
+   */
   public divide(form: FormModel): FormModel[] {
     let result: FormModel[] = new Array<FormModel>()
 
     let newWidth: number = form.width / 2;
 
     if(newWidth > minWidth){
-
-
-      let newForm1x: number = form.x;
+    let newForm1x: number = form.x;
       let newForm1y: number = form.y;
       let newForm1Width: number = newWidth;
       let newForm1Height: number = newWidth;
