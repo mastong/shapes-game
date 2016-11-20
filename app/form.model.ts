@@ -40,8 +40,8 @@ export abstract class FormModel {
     this.y = y;
     this.width = width;
     this.height = height
-    this.dx = Math.random()*this.width/5;
-    this.dy = Math.random()*this.height/5;
+    this.dx = Math.random()*this.width/10;
+    this.dy = Math.random()*this.height/10;
   }
 
   /**
@@ -54,16 +54,26 @@ export abstract class FormModel {
   public move(maxX: number, maxY: number): void{
     let newX: number;
     newX = this.x + this.dx;
-    if(newX < 0 || newX + this.width > maxX){
+    if(this.x === 0 || (this.x+ this.width) === maxX){
       this.dx = -1*this.dx;
       newX = this.x + this.dx;
+    }else if(newX < 0){
+      newX = 0;
+    } else if( newX + this.width > maxX){
+      newX = maxX - this.width;
     }
+
     let newY: number;
     newY = this.y + this.dy;
-    if(newY < 0 || newY + this.height > maxY){
+    if(this.y === 0 || (this.y + this.height) === maxY){
       this.dy = -1*this.dy;
       newY = this.y + this.dy;
+    }else if( newY < 0 ) {
+      newY = 0;
+    } else if( newY + this.height > maxY ) {
+      newY = maxY - this.height;
     }
+
     this.setX(newX);
     this.setY(newY);
   }
