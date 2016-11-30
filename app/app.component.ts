@@ -18,6 +18,8 @@ import { FormService } from './form.service';
         </g>
       </g>
     </svg>
+    <br>
+    <span>Score : {{score}}</span>
     <div>
       <select [(ngModel)]="currentFormType">
         <option *ngFor="let formType of formTypes" [value]="formType">{{formType}}</option>
@@ -48,6 +50,11 @@ export class AppComponent {
    * Only used in debug mode, will be removed later.
    */
   private running: boolean = false;
+
+  /**
+   * The current score
+   */
+  private score: number = 0;
 
   static parameters = ['canvasWidth', 'canvasHeight', FormService];
   constructor(private canvasWidth: number, private canvasHeight: number, private formService: FormService){  }
@@ -94,6 +101,8 @@ export class AppComponent {
     newForms.forEach((form: FormModel) =>{
       this.forms.push(form);
     });
+
+    this.score += form.getScoreValue();
   }
 
   //************** Debug functions, not used *****************************

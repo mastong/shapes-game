@@ -99,4 +99,13 @@ export abstract class FormModel {
   public setY(y: number): void{
     this.y = y;
   }
+
+  /**
+   * Return the value of the current state of the form.
+   * The smaller the form, the bigger the point
+   * @returns the form's score value, in it's current form
+   */
+  public getScoreValue(): number{
+    return Math.trunc(100 / this.width);
+  }
 }
