@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormModel } from './form.model';
 import { CircleModel } from './circle.model';
 import { SquareModel } from './square.model';
+import { Utils } from './utils';
 
 const minWidth: number = 10;
 
@@ -27,25 +28,21 @@ export class FormService{
     let result;
     switch(formType){
       case CircleModel.CIRCLE_TYPE :
-        let r: number = this.randInt(minWidth/2, minWidth*5);
-        let cx: number = this.randInt(r, this.canvasWidth-r);
-        let cy: number = this.randInt(r, this.canvasHeight-r);
+        let r: number =  Utils.randInt(minWidth/2, minWidth*5);
+        let cx: number = Utils.randInt(r, this.canvasWidth-r);
+        let cy: number = Utils.randInt(r, this.canvasHeight-r);
         result = new CircleModel(cx, cy, r);
         break;
       case SquareModel.SQUARE_TYPE:
-        let side: number = this.randInt(minWidth, minWidth*10);
-        let x: number = this.randInt(side, this.canvasWidth-side);
-        let y: number = this.randInt(side, this.canvasHeight-side);
+        let side: number = Utils.randInt(minWidth, minWidth*10);
+        let x: number = Utils.randInt(side, this.canvasWidth-side);
+        let y: number = Utils.randInt(side, this.canvasHeight-side);
         result = new SquareModel(x, y, side);
         break;
       default:
     }
 
     return result;
-  }
-
-  private randInt(min: number, max: number): number{
-    return (Math.floor(Math.random() * (max-min)) + min);
   }
 
   /**

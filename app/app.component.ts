@@ -3,7 +3,7 @@ import { CircleModel } from './circle.model';
 import { SquareModel } from './square.model';
 import { FormModel } from './form.model';
 import { FormService } from './form.service';
-
+import { Utils } from './utils';
 
 @Component({
   selector: 'my-app',
@@ -20,6 +20,8 @@ import { FormService } from './form.service';
     </svg>
     <br>
     <span>Score : {{score}}</span>
+    <br>
+    <input type="button" (click)="launchNewGame();" value="Launch a new game!" />
     <div>
       <select [(ngModel)]="currentFormType">
         <option *ngFor="let formType of formTypes" [value]="formType">{{formType}}</option>
@@ -103,6 +105,25 @@ export class AppComponent {
     });
 
     this.score += form.getScoreValue();
+  }
+
+  /**
+   * Start a game by :
+   * - resetting the score to 0
+   * - resetting the timer
+   * - clearing the board
+   * - generating a new set of forms
+   */
+  public launchNewGame(){
+    this.score = 0;
+    // TODO Should also rest the timer, when there'll be one
+    this.forms = [];
+    // TODO The min and max nb of forms must be in variable, to be able to update it with the game difficulty
+    let nbForms: number = Utils.randInt(1, 20);
+    for(let i: number = 0; i < nbForms; i++){
+      // TODO currently generate only one type of form, the one currently selected in the select box. Must randomize this
+      this.forms.push(this.formService.generateForm(this.currentFormType));
+    }
   }
 
   //************** Debug functions, not used *****************************
