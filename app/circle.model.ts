@@ -1,6 +1,6 @@
-import { FormModel } from './form.model';
+import { ShapeModel } from './shape.model';
 
-export class CircleModel extends FormModel{
+export class CircleModel extends ShapeModel{
   public centerX: number;
   public centerY: number;
   public radius: number;
@@ -16,18 +16,18 @@ export class CircleModel extends FormModel{
     this.radius = radius;
   }
 
-  /** @override FormModel*/
+  /** @override ShapeModel*/
   public getType(): string{
     return CircleModel.CIRCLE_TYPE;
   }
 
-  /** @override FormModel*/
+  /** @override ShapeModel*/
   public setX(x: number){
     super.setX(x);
     this.centerX = x+this.radius;
   }
 
-  /** @override FormModel*/
+  /** @override ShapeModel*/
   public setY(y: number){
     super.setY(y);
     this.centerY = y+this.radius;

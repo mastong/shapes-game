@@ -1,37 +1,37 @@
 /**
- * Define the bases of every form use in the application.
- * Every form is defined by :
+ * Define the bases of every shape use in the application.
+ * Every shape is defined by :
  * - an upper left corner
  * - a width and a height
  * for a "box" that contains it, so that the width and height are the smallest possible
- * For instance, in the case of a square, the box is the form itself.
+ * For instance, in the case of a square, the box is the shape itself.
  * For a circle, the box is a square, where each side are tangent to the circle
  */
-export abstract class FormModel {
+export abstract class ShapeModel {
 
   /**
-   * The x coordinate of the upper left corner of the form (or the box containing it)
+   * The x coordinate of the upper left corner of the shape (or the box containing it)
    */
   public x: number;
   /**
-   * The y coordinate of the upper left corner of the form (or the box containing it)
+   * The y coordinate of the upper left corner of the shape (or the box containing it)
    */
   public y: number;
   /**
-   * The width of the form (or the box containing it)
+   * The width of the shape (or the box containing it)
    */
   public width: number;
   /**
-   * The height of the form (or the box containing it)
+   * The height of the shape (or the box containing it)
    */
   public height: number;
 
   /**
-   * Direction and speed of the form on the x axe
+   * Direction and speed of the shape on the x axe
    */
   public dx: number;
   /**
-   * Direction and speed of the form on the y axe
+   * Direction and speed of the shape on the y axe
    */
   public dy: number;
 
@@ -45,11 +45,11 @@ export abstract class FormModel {
   }
 
   /**
-   * Move the form accordind to its direction.
-   * If the form should go out of the board, invert the direction to make the form "bounce back of the wall"
+   * Move the shape accordind to its direction.
+   * If the shape should go out of the board, invert the direction to make the shape "bounce back of the wall"
    * Assume the min value for the x and the y coordinate is 0.
-   * @param maxX the max value accepted for the x coordinate. Over it, the form will be out of the board
-   * @param maxY the max value accepted for the y coordinate. Over it, the form will be out of the board
+   * @param maxX the max value accepted for the x coordinate. Over it, the shape will be out of the board
+   * @param maxY the max value accepted for the y coordinate. Over it, the shape will be out of the board
    */
   public move(maxX: number, maxY: number): void{
     let newX: number;
@@ -79,8 +79,8 @@ export abstract class FormModel {
   }
 
   /**
-   * Return the form's type
-   * @returns a string corresponding to the type of the form
+   * Return the shape's type
+   * @returns a string corresponding to the type of the shape
    */
   abstract getType(): string;
 
@@ -101,9 +101,9 @@ export abstract class FormModel {
   }
 
   /**
-   * Return the value of the current state of the form.
-   * The smaller the form, the bigger the point
-   * @returns the form's score value, in it's current form
+   * Return the value of the current state of the shape.
+   * The smaller the shape, the bigger the point
+   * @returns the shape's score value, in it's current shape
    */
   public getScoreValue(): number{
     return Math.trunc(100 / this.width);

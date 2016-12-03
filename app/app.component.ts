@@ -1,20 +1,20 @@
 import { Component } from '@angular/core';
 import { CircleModel } from './circle.model';
 import { SquareModel } from './square.model';
-import { FormModel } from './form.model';
-import { FormService } from './form.service';
+import { ShapeModel } from './shape.model';
+import { ShapeService } from './shape.service';
 import { Utils } from './utils';
 
 @Component({
   selector: 'my-app',
   template: `
-    <h1>Let's play with forms!</h1>
+    <h1>Let's play with shapes!</h1>
     <svg attr.width="{{canvasWidth}}" attr.height="{{canvasHeight}}" style="background-color:gray">
-      <g *ngFor="let form of forms">
-        <g [ngSwitch]="form.getType()">
-          <g *ngSwitchCase="'circle'" circleForm [circleData]="form" (onDivide)="divide($event)"></g>
-          <g *ngSwitchCase="'square'" squareForm [squareData]="form" (onDivide)="divide($event)"></g>
-          <g *ngSwitchDefault><!-- Form type unknow --></g>
+      <g *ngFor="let shape of shapes">
+        <g [ngSwitch]="shape.getType()">
+          <g *ngSwitchCase="'circle'" circleShape [circleData]="shape" (onDivide)="divide($event)"></g>
+          <g *ngSwitchCase="'square'" squareShape [squareData]="shape" (onDivide)="divide($event)"></g>
+          <g *ngSwitchDefault><!-- Shape type unknow --></g>
         </g>
       </g>
     </svg>
@@ -23,32 +23,32 @@ import { Utils } from './utils';
     <br>
     <input type="button" (click)="launchNewGame();" value="Launch a new game!" />
     <div>
-      <select [(ngModel)]="currentFormType">
-        <option *ngFor="let formType of formTypes" [value]="formType">{{formType}}</option>
+      <select [(ngModel)]="currentShapeType">
+        <option *ngFor="let shapeType of shapeTypes" [value]="shapeType">{{shapeType}}</option>
       </select>
-      <input type="button" (click)="add();" value="Add Form" />
+      <input type="button" (click)="add();" value="Add Shape" />
     </div>
   `,
-  providers: [FormService]
+  providers: [ShapeService]
 })
 export class AppComponent {
 
   /**
-   * all the form types handled by the application
+   * all the shape types handled by the application
    */
-  private formTypes: Array<string> = ['circle', 'square', 'triangle'];
+  private shapeTypes: Array<string> = ['circle', 'square', 'triangle'];
   /**
-   * the current form type that will be added on the add button click
-   * Not sure if this property will be kept in the future, when the forms will be added in a more automatic way
+   * the current shape type that will be added on the add button click
+   * Not sure if this property will be kept in the future, when the shapes will be added in a more automatic way
    */
-  private currentFormType: string;
+  private currentShapeType: string;
   /**
-   * all the forms currently on the board
+   * all the shapes currently on the board
    */
-  private forms: FormModel[] = [];
+  private shapes: ShapeModel[] = [];
 
   /**
-   * Can stop or start the animation (ie the forms movement)
+   * Can stop or start the animation (ie the shapes movement)
    * Only used in debug mode, will be removed later.
    */
   private running: boolean = false;
@@ -58,53 +58,53 @@ export class AppComponent {
    */
   private score: number = 0;
 
-  static parameters = ['canvasWidth', 'canvasHeight', FormService];
-  constructor(private canvasWidth: number, private canvasHeight: number, private formService: FormService){  }
+  static parameters = ['canvasWidth', 'canvasHeight', ShapeService];
+  constructor(private canvasWidth: number, private canvasHeight: number, private shapeService: ShapeService){  }
 
   public ngOnInit() {
     this.running = true;
-    this.moveForms();
+    this.moveShapes();
   }
 
   /**
-   * Add a new form to the board, based on the type selected in the select.
+   * Add a new shape to the board, based on the type selected in the select.
    * Only present during the dev, but will be removed/replaced later by some kind of automatic process
    */
   public add(): void{
-    if(!this.currentFormType){
-      console.warn("No form type selected..")
+    if(!this.currentShapeType){
+      console.warn("No shape type selected..")
       return;
     }
 
-    this.forms.push(this.formService.generateForm(this.currentFormType));
+    this.shapes.push(this.shapeService.generateShape(this.currentShapeType));
   }
 
   /**
-   * Update the position of all the forms on the board.
+   * Update the position of all the shapes on the board.
    * This method will be called at each navigator refresh
    */
-  public moveForms(){
-    this.forms.forEach((form: FormModel) =>{
-      form.move(this.canvasWidth, this.canvasHeight);
+  public moveShapes(){
+    this.shapes.forEach((shape: ShapeModel) =>{
+      shape.move(this.canvasWidth, this.canvasHeight);
     });
     if(this.running){
-      requestAnimationFrame(()=> this.moveForms());
+      requestAnimationFrame(()=> this.moveShapes());
     }
   }
 
   /**
-   * Remove the given form from the board, and replace it with the result of it's division, if any
-   * @param form The form to remove from the board and divide
+   * Remove the given shape from the board, and replace it with the result of it's division, if any
+   * @param shape The shape to remove from the board and divide
    */
-  public divide(form: FormModel): void{
-    let newForms: FormModel[] = this.formService.divide(form);
-    let index: number = this.forms.indexOf(form);
-    this.forms.splice(index, 1);
-    newForms.forEach((form: FormModel) =>{
-      this.forms.push(form);
+  public divide(shape: ShapeModel): void{
+    let newShapes: ShapeModel[] = this.shapeService.divide(shape);
+    let index: number = this.shapes.indexOf(shape);
+    this.shapes.splice(index, 1);
+    newShapes.forEach((shape: ShapeModel) =>{
+      this.shapes.push(shape);
     });
 
-    this.score += form.getScoreValue();
+    this.score += shape.getScoreValue();
   }
 
   /**
@@ -112,32 +112,32 @@ export class AppComponent {
    * - resetting the score to 0
    * - resetting the timer
    * - clearing the board
-   * - generating a new set of forms
+   * - generating a new set of shapes
    */
   public launchNewGame(){
     this.score = 0;
     // TODO Should also rest the timer, when there'll be one
-    this.forms = [];
-    // TODO The min and max nb of forms must be in variable, to be able to update it with the game difficulty
-    let nbForms: number = Utils.randInt(1, 20);
-    for(let i: number = 0; i < nbForms; i++){
-      // TODO currently generate only one type of form, the one currently selected in the select box. Must randomize this
-      this.forms.push(this.formService.generateForm(this.currentFormType));
+    this.shapes = [];
+    // TODO The min and max nb of shapes must be in variable, to be able to update it with the game difficulty
+    let nbShapes: number = Utils.randInt(1, 20);
+    for(let i: number = 0; i < nbShapes; i++){
+      // TODO currently generate only one type of shape, the one currently selected in the select box. Must randomize this
+      this.shapes.push(this.shapeService.generateShape(this.currentShapeType));
     }
   }
 
   //************** Debug functions, not used *****************************
-  private debugForms(){
-    console.log("Forms :");
-    this.forms.forEach((form: FormModel)=>{
-      console.log(form);
+  private debugShapes(){
+    console.log("Shapes :");
+    this.shapes.forEach((shape: ShapeModel)=>{
+      console.log(shape);
     });
   }
 
   public toggleRunning(){
     this.running = !this.running;
     if(this.running){
-      requestAnimationFrame(()=> this.moveForms());
+      requestAnimationFrame(()=> this.moveShapes());
     }
   }
   //**********************************************************************

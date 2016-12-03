@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CircleModel } from './circle.model';
 
 @Component({
-  selector: '[circleForm]',
+  selector: '[circleShape]',
   template: '<svg:circle attr.cx="{{ circleData.centerX }}" attr.cy="{{ circleData.centerY }}" attr.r="{{ circleData.radius }}"  fill="yellow" (mousedown)="divide()"></circle>'
 })
 export class CircleComponent {
