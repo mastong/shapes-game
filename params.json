@@ -1,0 +1,6 @@
+{
+  "name": "Shapes-game",
+  "tagline": "",
+  "body": "# shapes-game\r\n\r\nThe main objective of this project is to test 2 new technologies (at least for me), **Angular2 and SVG**. The project itself is more a pretext than anything else.\r\n\r\n## The game\r\nIn a \"game board\", several geometric shapes are moving, bouncing off the \"walls\".  \r\nThe player must click the shapes, which will then be divided in 2 smaller shapes.  \r\nWhen a shape has reached its minimal size and is clicked, it's remove from the game board.  \r\nThe objective is to clear the board in a minimum amount of time.\r\n\r\n*The project is currently a \"work in progress\", and it's nowhere near this state. It's more a POC for now...*\r\n\r\n## Technical criteria\r\nIt must be as light as possible.  \r\nIt must work on all the modern browsers.\r\nIt must work on mobile devices.\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
