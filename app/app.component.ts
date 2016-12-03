@@ -22,6 +22,7 @@ import { Utils } from './utils';
     <span>Score : {{score}}</span>
     <br>
     <input type="button" (click)="launchNewGame();" value="Launch a new game!" />
+    <!-- Only here for debug purpose -->
     <div>
       <select [(ngModel)]="currentShapeType">
         <option *ngFor="let shapeType of shapeTypes" [value]="shapeType">{{shapeType}}</option>
@@ -36,7 +37,7 @@ export class AppComponent {
   /**
    * all the shape types handled by the application
    */
-  private shapeTypes: Array<string> = ['circle', 'square', 'triangle'];
+  private shapeTypes: Array<string> = ['circle', 'square'];
   /**
    * the current shape type that will be added on the add button click
    * Not sure if this property will be kept in the future, when the shapes will be added in a more automatic way
@@ -121,9 +122,16 @@ export class AppComponent {
     // TODO The min and max nb of shapes must be in variable, to be able to update it with the game difficulty
     let nbShapes: number = Utils.randInt(1, 20);
     for(let i: number = 0; i < nbShapes; i++){
-      // TODO currently generate only one type of shape, the one currently selected in the select box. Must randomize this
-      this.shapes.push(this.shapeService.generateShape(this.currentShapeType));
+      this.shapes.push(this.shapeService.generateShape(this.getRandomShapeType()));
     }
+  }
+
+  /**
+   * Return a shape type randomly chosen from all the currently available type
+   * @returns the chosen shape type name
+   */
+  private getRandomShapeType(): string{
+    return this.shapeTypes[Utils.randInt(0, this.shapeTypes.length-1)];
   }
 
   //************** Debug functions, not used *****************************
