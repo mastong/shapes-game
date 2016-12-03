@@ -1,6 +1,6 @@
 # shapes-game
 
-The main objective of this project is to test 2 new technologies (at least for me), **Angular2 and SVG**. The project itself is more a pretext than anyting else.
+The main objective of this project is to test 2 new technologies (at least for me), **Angular2 and SVG**. The project itself is more a pretext than anything else.
 
 ## The game
 In a "game board", several geometric shapes are moving, bouncing off the "walls".  
