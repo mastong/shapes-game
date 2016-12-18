@@ -21,6 +21,8 @@ import { Utils } from './utils';
     <br>
     <span>Score : {{score}}</span>
     <br>
+    <span>Timer : {{timer}}</span>
+    <br>
     <input type="button" (click)="launchNewGame();" value="Launch a new game!" />
     <!-- Only here for debug purpose -->
     <div>
@@ -33,6 +35,15 @@ import { Utils } from './utils';
   providers: [ShapeService]
 })
 export class AppComponent {
+
+  /**
+   * The timer duration
+   */
+  private timer: number;
+  /**
+   * The technical id used to stop a timer once it's started
+   */
+  private timerThreadId: any;
 
   /**
    * all the shape types handled by the application
@@ -49,8 +60,7 @@ export class AppComponent {
   private shapes: ShapeModel[] = [];
 
   /**
-   * Can stop or start the animation (ie the shapes movement)
-   * Only used in debug mode, will be removed later.
+   * Indicate if the game is currently on or not.
    */
   private running: boolean = false;
 
@@ -63,8 +73,8 @@ export class AppComponent {
   constructor(private canvasWidth: number, private canvasHeight: number, private shapeService: ShapeService){  }
 
   public ngOnInit() {
-    this.running = true;
-    this.moveShapes();
+    //this.running = true;
+    //this.moveShapes();
   }
 
   /**
@@ -98,14 +108,16 @@ export class AppComponent {
    * @param shape The shape to remove from the board and divide
    */
   public divide(shape: ShapeModel): void{
-    let newShapes: ShapeModel[] = this.shapeService.divide(shape);
-    let index: number = this.shapes.indexOf(shape);
-    this.shapes.splice(index, 1);
-    newShapes.forEach((shape: ShapeModel) =>{
-      this.shapes.push(shape);
-    });
+    if(this.running){
+      let newShapes: ShapeModel[] = this.shapeService.divide(shape);
+      let index: number = this.shapes.indexOf(shape);
+      this.shapes.splice(index, 1);
+      newShapes.forEach((shape: ShapeModel) =>{
+        this.shapes.push(shape);
+      });
 
-    this.score += shape.getScoreValue();
+      this.score += shape.getScoreValue();
+    }
   }
 
   /**
@@ -117,12 +129,32 @@ export class AppComponent {
    */
   public launchNewGame(){
     this.score = 0;
-    // TODO Should also rest the timer, when there'll be one
     this.shapes = [];
     // TODO The min and max nb of shapes must be in variable, to be able to update it with the game difficulty
     let nbShapes: number = Utils.randInt(1, 20);
     for(let i: number = 0; i < nbShapes; i++){
       this.shapes.push(this.shapeService.generateShape(this.getRandomShapeType()));
+    }
+    // TODO Should be a variable, to be able to update it with the game difficulty
+    this.timer = 10;
+    this.timerThreadId = setInterval(this.decreaseTimer, 1000, this);
+    this.running = true;
+    this.moveShapes();
+  }
+
+  /**
+   * Decrement the timer by one. Must be called every second.
+   * When the timer reach 0, end the game
+   * @param context The object representing the game
+   */
+  private decreaseTimer(context: AppComponent): void{
+    console.log("decreaseTimer");
+    context.timer--;
+    if(context.timer === 0){
+      context.running = false;
+      clearInterval(context.timerThreadId);
+      // TODO Should display the final score in a more friendly way
+      alert("Score "+context.score);
     }
   }
 
