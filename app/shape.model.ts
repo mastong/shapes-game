@@ -40,8 +40,11 @@ export abstract class ShapeModel {
     this.y = y;
     this.width = width;
     this.height = height
-    this.dx = Math.random()*this.width/10;
-    this.dy = Math.random()*this.height/10;
+    // TODO Should rework the speed calculation
+    this.dx = Math.random()*3+2;
+    this.dx = Math.random() > 0.5 ? this.dx : -this.dx;
+    this.dy = Math.random()*3+2;
+    this.dy = Math.random() > 0.5 ? this.dy : -this.dy;
   }
 
   /**
