@@ -4,7 +4,7 @@ import { CircleModel } from './circle.model';
 import { SquareModel } from './square.model';
 import { Utils } from './utils';
 
-const minWidth: number = 10;
+const minWidth: number = 20;
 
 @Injectable()
 export class ShapeService{
@@ -28,13 +28,13 @@ export class ShapeService{
     let result;
     switch(shapeType){
       case CircleModel.CIRCLE_TYPE :
-        let r: number =  Utils.randInt(minWidth/2, minWidth*5);
+        let r: number =  Utils.randInt(minWidth/2, minWidth*3);
         let cx: number = Utils.randInt(r, this.canvasWidth-r);
         let cy: number = Utils.randInt(r, this.canvasHeight-r);
         result = new CircleModel(cx, cy, r);
         break;
       case SquareModel.SQUARE_TYPE:
-        let side: number = Utils.randInt(minWidth, minWidth*10);
+        let side: number = Utils.randInt(minWidth, minWidth*5);
         let x: number = Utils.randInt(side, this.canvasWidth-side);
         let y: number = Utils.randInt(side, this.canvasHeight-side);
         result = new SquareModel(x, y, side);
