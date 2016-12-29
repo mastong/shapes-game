@@ -3,7 +3,7 @@ import { SquareModel } from './square.model';
 
 @Component({
   selector: '[squareShape]',
-  template: '<svg:rect attr.x="{{ squareData.x }}" attr.y="{{ squareData.y }}" attr.width="{{ squareData.width }}" attr.height="{{ squareData.height }}" fill="green" (mousedown)="divide()"></rect>'
+  template: '<svg:rect attr.x="{{ squareData.x }}" attr.y="{{ squareData.y }}" attr.width="{{ squareData.width }}" attr.height="{{ squareData.height }}" fill="green" (mousedown)="divide()" class="shape"></rect>'
 })
 export class SquareComponent {
   @Input()

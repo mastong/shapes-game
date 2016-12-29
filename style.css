@@ -12,3 +12,6 @@ h2, h3 {
 body {
   margin: 2em;
 }
+.shape {
+  cursor: pointer;
+}
