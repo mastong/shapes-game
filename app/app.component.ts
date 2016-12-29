@@ -9,7 +9,7 @@ import { Utils } from './utils';
   selector: 'my-app',
   template: `
     <h1>Let's play with shapes!</h1>
-    <svg attr.width="{{canvasWidth}}" attr.height="{{canvasHeight}}" style="background-color:gray">
+    <svg attr.width="{{canvasWidth}}" attr.height="{{canvasHeight}}" class="board">
       <g *ngFor="let shape of shapes">
         <g [ngSwitch]="shape.getType()">
           <g *ngSwitchCase="'circle'" circleShape [circleData]="shape" (onDivide)="divide($event)"></g>
@@ -18,14 +18,16 @@ import { Utils } from './utils';
         </g>
       </g>
     </svg>
+    <div class="gameData">
     <br>
-    <span>Level : {{level}}</span>
-    <br>
-    <span>Score : {{score}}</span>
-    <br>
-    <span>Timer : {{timer}}</span>
-    <br>
-    <input type="button" (click)="launchNewGame();" value="Launch a new game!" />
+      <span>Level : {{level}}</span>
+      <br>
+      <span>Score : {{score}}</span>
+      <br>
+      <span>Timer : {{timer}}</span>
+      <input type="button" (click)="launchNewGame();" value="Launch a new game!" />
+    </div>
+
     <!-- Only here for debug purpose -->
     <div>
       Debug only
