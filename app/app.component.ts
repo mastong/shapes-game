@@ -19,6 +19,8 @@ import { Utils } from './utils';
       </g>
     </svg>
     <br>
+    <span>Level : {{level}}</span>
+    <br>
     <span>Score : {{score}}</span>
     <br>
     <span>Timer : {{timer}}</span>
@@ -26,6 +28,8 @@ import { Utils } from './utils';
     <input type="button" (click)="launchNewGame();" value="Launch a new game!" />
     <!-- Only here for debug purpose -->
     <div>
+      Debug only
+      <br>
       <select [(ngModel)]="currentShapeType">
         <option *ngFor="let shapeType of shapeTypes" [value]="shapeType">{{shapeType}}</option>
       </select>
@@ -68,6 +72,12 @@ export class AppComponent {
    * The current score
    */
   private score: number = 0;
+
+  /*
+   * The current level.
+   * Each level increase the difficulty
+   */
+  private level: number = 1;
 
   static parameters = ['canvasWidth', 'canvasHeight', ShapeService];
   constructor(private canvasWidth: number, private canvasHeight: number, private shapeService: ShapeService){  }
@@ -117,6 +127,10 @@ export class AppComponent {
       });
 
       this.score += shape.getScoreValue();
+      if(this.shapes.length === 0){
+        this.level++;
+        this.initNewRound(this.level);
+      }
     }
   }
 
@@ -129,14 +143,25 @@ export class AppComponent {
    */
   public launchNewGame(){
     this.score = 0;
+    this.level = 1;
+    this.initNewRound(this.level);
+  }
+
+  /**
+   * Init a new round for a given level.
+   * Reset the timer and generate a new set of shapes.
+   * The higher the level, the more shapes are generated.
+   */
+  private initNewRound(level: number){
     this.shapes = [];
-    // TODO The min and max nb of shapes must be in variable, to be able to update it with the game difficulty
-    let nbShapes: number = Utils.randInt(1, 20);
-    for(let i: number = 0; i < nbShapes; i++){
+    for(let i: number = 0; i < level; i++){
       this.shapes.push(this.shapeService.generateShape(this.getRandomShapeType()));
     }
-    // TODO Should be a variable, to be able to update it with the game difficulty
-    this.timer = 10;
+    // TODO Should be calculated from the level
+    this.timer = 30+(level-1)*5;
+    if(this.timerThreadId){
+      clearInterval(this.timerThreadId);
+    }
     this.timerThreadId = setInterval(this.decreaseTimer, 1000, this);
     this.running = true;
     this.moveShapes();
