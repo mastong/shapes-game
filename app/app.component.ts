@@ -19,7 +19,6 @@ import { Utils } from './utils';
       </g>
     </svg>
     <div class="gameData">
-    <br>
       <span>Level : {{level}}</span>
       <br>
       <span>Score : {{score}}</span>
@@ -36,6 +35,24 @@ import { Utils } from './utils';
         <option *ngFor="let shapeType of shapeTypes" [value]="shapeType">{{shapeType}}</option>
       </select>
       <input type="button" (click)="add();" value="Add Shape" />
+      <br>
+      <label>
+        <input type="checkbox" name="isMoving"  [(ngModel)]="running">
+        Move
+      </label>
+      <div *ngIf="shapes[0]">
+        Data for the first shape of the list :
+        <br>
+        <label>
+          <input type="number" name="dx" [(ngModel)]="shapes[0].dx">
+          dx
+        </label>
+        <br>
+        <label>
+          <input type="number" name="dy" [(ngModel)]="shapes[0].dy">
+          dy
+        </label>
+      </div>
     </div>
   `,
   providers: [ShapeService]
@@ -86,7 +103,7 @@ export class AppComponent {
 
   public ngOnInit() {
     //this.running = true;
-    //this.moveShapes();
+    this.moveShapes();
   }
 
   /**
@@ -107,12 +124,12 @@ export class AppComponent {
    * This method will be called at each navigator refresh
    */
   public moveShapes(){
-    this.shapes.forEach((shape: ShapeModel) =>{
-      shape.move(this.canvasWidth, this.canvasHeight);
-    });
     if(this.running){
-      requestAnimationFrame(()=> this.moveShapes());
+      this.shapes.forEach((shape: ShapeModel) =>{
+        shape.move(this.canvasWidth, this.canvasHeight);
+      });
     }
+    requestAnimationFrame(()=> this.moveShapes());
   }
 
   /**
