@@ -40,10 +40,10 @@ export abstract class ShapeModel {
     this.y = y;
     this.width = width;
     this.height = height
-    // TODO Should rework the speed calculation
-    this.dx = Math.random()*3+2;
+    // The "speed" will be between 1 and 3 pixel by refresh, positive or negative
+    this.dx = Math.random()*2+1;
     this.dx = Math.random() > 0.5 ? this.dx : -this.dx;
-    this.dy = Math.random()*3+2;
+    this.dy = Math.random()*2+1;
     this.dy = Math.random() > 0.5 ? this.dy : -this.dy;
   }
 

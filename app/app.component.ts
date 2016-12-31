@@ -4,54 +4,46 @@ import { SquareModel } from './square.model';
 import { ShapeModel } from './shape.model';
 import { ShapeService } from './shape.service';
 import { Utils } from './utils';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'my-app',
   template: `
-    <h1>Let's play with shapes!</h1>
-    <svg attr.width="{{canvasWidth}}" attr.height="{{canvasHeight}}" class="board">
-      <g *ngFor="let shape of shapes">
-        <g [ngSwitch]="shape.getType()">
-          <g *ngSwitchCase="'circle'" circleShape [circleData]="shape" (onDivide)="divide($event)"></g>
-          <g *ngSwitchCase="'square'" squareShape [squareData]="shape" (onDivide)="divide($event)"></g>
-          <g *ngSwitchDefault><!-- Shape type unknow --></g>
-        </g>
-      </g>
-    </svg>
-    <div class="gameData">
-      <span>Level : {{level}}</span>
-      <br>
-      <span>Score : {{score}}</span>
-      <br>
-      <span>Timer : {{timer}}</span>
-      <input type="button" (click)="launchNewGame();" value="Launch a new game!" />
-    </div>
-
-    <!-- Only here for debug purpose -->
-    <div>
-      Debug only
-      <br>
-      <select [(ngModel)]="currentShapeType">
-        <option *ngFor="let shapeType of shapeTypes" [value]="shapeType">{{shapeType}}</option>
-      </select>
-      <input type="button" (click)="add();" value="Add Shape" />
-      <br>
-      <label>
-        <input type="checkbox" name="isMoving"  [(ngModel)]="running">
-        Move
-      </label>
-      <div *ngIf="shapes[0]">
-        Data for the first shape of the list :
-        <br>
-        <label>
-          <input type="number" name="dx" [(ngModel)]="shapes[0].dx">
-          dx
-        </label>
-        <br>
-        <label>
-          <input type="number" name="dy" [(ngModel)]="shapes[0].dy">
-          dy
-        </label>
+    <div class=".container-fluid">
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <h1 class="title">Let's play with shapes!</h1>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <svg attr.width="{{canvasWidth}}" attr.height="{{canvasHeight}}" class="board">
+            <g *ngFor="let shape of shapes">
+              <g [ngSwitch]="shape.getType()">
+                <g *ngSwitchCase="'circle'" circleShape [circleData]="shape" (onDivide)="divide($event)"></g>
+                <g *ngSwitchCase="'square'" squareShape [squareData]="shape" (onDivide)="divide($event)"></g>
+                <g *ngSwitchDefault><!-- Shape type unknow --></g>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+        <!-- TODO Should use the canvasWidth variable, but angular won't let me do it :( -->
+          <div class="gameData" style="width: 500;">
+            <span>Level : {{level}}</span>
+            <span>Score : {{score}}</span>
+            <span>Timer : {{timer}}</span>
+            <button class="btn btn-success" type="button" (click)="launchNewGame();">Launch a new game!</button>
+          </div>
+        </div>
+        <div class="col-md-4"></div>
       </div>
     </div>
   `,
@@ -98,8 +90,8 @@ export class AppComponent {
    */
   private level: number = 1;
 
-  static parameters = ['canvasWidth', 'canvasHeight', ShapeService];
-  constructor(private canvasWidth: number, private canvasHeight: number, private shapeService: ShapeService){  }
+  static parameters = [ToastsManager, 'canvasWidth', 'canvasHeight', ShapeService];
+  constructor(public toastr: ToastsManager, private canvasWidth: number, private canvasHeight: number, private shapeService: ShapeService){ }
 
   public ngOnInit() {
     //this.running = true;
@@ -176,7 +168,6 @@ export class AppComponent {
     for(let i: number = 0; i < level; i++){
       this.shapes.push(this.shapeService.generateShape(this.getRandomShapeType()));
     }
-    // TODO Should be calculated from the level
     this.timer = 30+(level-1)*5;
     if(this.timerThreadId){
       clearInterval(this.timerThreadId);
@@ -197,8 +188,7 @@ export class AppComponent {
     if(context.timer === 0){
       context.running = false;
       clearInterval(context.timerThreadId);
-      // TODO Should display the final score in a more friendly way
-      alert("Score "+context.score);
+      context.toastr.success("Your score : "+context.score, "Game Over");
     }
   }
 
